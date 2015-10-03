@@ -10,6 +10,40 @@
 <body>
     <div class="container text-center">
         <div id="3d-cube"></div>
+        <hr>
+        <form class="form-inline" id="led-select">
+            <h4>Select LED</h4>
+            <fieldset class="form-group">
+                <label for="x">X</label>
+                <input class="form-control" type="number" min="0" max="7" value="0" name="x" id="x">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="y">Y</label>
+                <input class="form-control" type="number" min="0" max="7" value="0" name="y" id="y">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="z">Z</label>
+                <input class="form-control" type="number" min="0" max="7" value="0" name="z" id="z">
+            </fieldset>
+            <button class="btn btn-primary">Select LED</button>
+        </form>
+        <hr>
+        <form id="led-settings">
+            <h4>Power</h4>
+            <fieldset class="form-group">
+                <label class="c-input c-checkbox">
+                    <input type="checkbox">
+                    <span class="c-indicator"></span>
+                    Power
+                </label>
+            </fieldset>
+            <h4>Color</h4>
+            <fieldset class="form-group">
+                <label for="color">Color</label>
+                <input class="form-control" type="text" name="color" id="color">
+            </fieldset>
+            <button class="btn btn-primary">Update</button>
+        </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.min.js"></script>
     <script src="js/vendor/OrbitControls.js"></script>
