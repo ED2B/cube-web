@@ -2,7 +2,7 @@ var settings = {
     cube: {
         size: 8,
         leds: {
-            defaultColor: 0x969696,
+            defaultColor: 0x0000ff,
             size: 0.2,
             opacity: 0.1
         }
@@ -18,9 +18,40 @@ var Led = function(object) {
     this.object = object;
 };
 
+Led.prototype.getColor = function() {
+    return this.object.material.color.getHex();
+}
+
 Led.prototype.setColor = function(hex) {
     this.object.material.color.setHex(hex);
 };
+
+document.getElementById('led-settings').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var x = document.getElementById('x').value;
+    var y = document.getElementById('y').value;
+    var z = document.getElementById('z').value;
+
+    var color = parseInt(document.getElementById('color').value, 16);
+
+    leds[x][y][z].setColor(color);
+});
+
+function updateLedSettings() {
+    var x = document.getElementById('x').value;
+    var y = document.getElementById('y').value;
+    var z = document.getElementById('z').value;
+
+    var hex = leds[x][y][z].getColor().toString(16).toUpperCase();
+    hex = "000000".substr(0, 6 - hex.length) + hex;
+
+    document.getElementById('color').value = hex;
+}
+
+document.getElementById('x').addEventListener('change', updateLedSettings);
+document.getElementById('y').addEventListener('change', updateLedSettings);
+document.getElementById('z').addEventListener('change', updateLedSettings);
 
 var center = settings.cube.size / 2 - 0.5;
 var centerVector = new THREE.Vector3(center, center, center);
@@ -37,6 +68,7 @@ settings.canvas.parentElement.appendChild(renderer.domElement);
 // Enable camera controls
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableZoom = false;
+controls.enableKeys = false;
 controls.target.copy(centerVector);
 
 controls.update();
@@ -72,6 +104,8 @@ for (var i = 0; i < Math.pow(settings.cube.size, 3); i++) {
 
     scene.add(led);
 }
+
+updateLedSettings();
 
 function render() {
     requestAnimationFrame(render);
