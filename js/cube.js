@@ -2,11 +2,24 @@ var settings = {
     cube: {
         size: 8,
         leds: {
-            color: 0x969696,
+            defaultColor: 0x969696,
             size: 0.2,
             opacity: 0.1
         }
+    },
+    canvas: {
+        width: 500,
+        height: 500,
+        parentElement: document.getElementById('3d-cube')
     }
+};
+
+var Led = function(object) {
+    this.object = object;
+};
+
+Led.prototype.setColor = function(hex) {
+    this.object.material.color.setHex(hex);
 };
 
 var center = settings.cube.size / 2 - 0.5;
@@ -18,11 +31,11 @@ camera.position.copy(centerVector);
 camera.position.z *= 4;
 
 var renderer = new THREE.WebGLRenderer({alpha: false});
-renderer.setSize(500, 500);
-document.getElementById('3d-cube').appendChild(renderer.domElement);
+renderer.setSize(settings.canvas.width, settings.canvas.height);
+settings.canvas.parentElement.appendChild(renderer.domElement);
 
 // Enable camera controls
-controls = new THREE.OrbitControls(camera, renderer.domElement);
+var controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableZoom = false;
 controls.target.copy(centerVector);
 
@@ -35,31 +48,30 @@ for (var i = 0; i < Math.pow(settings.cube.size, 3); i++) {
     var geometry = new THREE.BoxGeometry(settings.cube.leds.size, settings.cube.leds.size, settings.cube.leds.size);
     var material = new THREE.MeshBasicMaterial({
         wireframe: true,
-        color: settings.cube.leds.color,
+        color: settings.cube.leds.defaultColor,
         opacity: settings.cube.leds.opacity
     });
-    var cube = new THREE.Mesh(geometry, material);
+    var led = new THREE.Mesh(geometry, material);
 
     var x = Math.floor(i / settings.cube.size) % settings.cube.size;
     var y = Math.floor(i / Math.pow(settings.cube.size, 2));
     var z = i % settings.cube.size;
 
+    led.position.set(x, y, z);
+
     // Generate 3D array on the fly
     if (!leds[x]) {
         leds[x] = [];
     }
+
     if (!leds[x][y]) {
         leds[x][y] = [];
     }
 
-    leds[x][y][z] = cube;
+    leds[x][y][z] = new Led(led);
 
-    cube.position.set(x, y, z);
-
-    scene.add(cube);
+    scene.add(led);
 }
-
-leds[0][0][0].material.color.setHex(0x00ff00);
 
 function render() {
     requestAnimationFrame(render);
