@@ -1,0 +1,8 @@
+{
+  "name": "cube-web",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "~4.0.0",
+    "three.js": "threejs#*"
+  }
+}
