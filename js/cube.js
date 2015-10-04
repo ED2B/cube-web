@@ -11,6 +11,9 @@ var settings = {
             defaultColor: 0x0000ff,
             size: 0.2,
             opacity: 0.1
+        },
+        highlight: {
+            size: 0.4
         }
     },
     canvas: {
@@ -82,6 +85,22 @@ function generateCube(size) {
     }
 }
 
+function generateHighlight() {
+    var geometry = new THREE.BoxGeometry(
+        settings.cube.highlight.size,
+        settings.cube.highlight.size,
+        settings.cube.highlight.size
+    );
+
+    var material = new THREE.MeshBasicMaterial({
+        wireframe: true,
+        color: 0xff0000,
+        opacity: 0.5
+    });
+
+    return new THREE.Mesh(geometry, material);
+}
+
 function setLedOptions(e) {
     e.preventDefault();
 
@@ -103,6 +122,8 @@ function showLedOptions() {
     hex = "000000".substr(0, 6 - hex.length) + hex;
 
     $('#color').val(hex);
+
+    highlight.position.set(x, y, z);
 }
 
 // ---
@@ -147,6 +168,8 @@ controls.update();
 var leds = [];
 
 generateCube(settings.cube.size);
+var highlight = generateHighlight();
+scene.add(highlight);
 showLedOptions();
 
 // ---
