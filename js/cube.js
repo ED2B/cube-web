@@ -123,7 +123,15 @@ function showLedOptions() {
 
     $('#color').val(hex);
 
+    selectLed(x, y, z);
+}
+
+function selectLed(x, y, z) {
     highlight.position.set(x, y, z);
+
+    $('#x').val(x);
+    $('#y').val(y);
+    $('#z').val(z);
 }
 
 // ---
@@ -148,7 +156,11 @@ $(document).on('mousedown', function(e) {
         return;
     }
 
-    highlight.position.copy(selected.object.position);
+    selectLed(
+        selected.object.position.x,
+        selected.object.position.y,
+        selected.object.position.z
+    );
 });
 
 // ---
