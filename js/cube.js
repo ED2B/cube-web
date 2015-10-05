@@ -132,6 +132,24 @@ function showLedOptions() {
 
 $('#led-settings').submit(setLedOptions);
 $('#x, #y, #z').change(showLedOptions);
+$(document).on('mousedown', function(e) {
+    var mouse = new THREE.Vector2(
+        (e.clientX / window.innerWidth) * 2 - 1,
+        -(e.clientY / window.innerHeight) * 2 + 1
+    );
+
+    var raycaster = new THREE.Raycaster();
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var selected = raycaster.intersectObjects(scene.children)[0];
+
+    if (!selected) {
+        return;
+    }
+
+    highlight.position.copy(selected.point);
+});
 
 // ---
 // Main
