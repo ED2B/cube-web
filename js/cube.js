@@ -10,7 +10,7 @@ var settings = {
         leds: {
             defaultColor: 0xffffff,
             size: 0.2,
-            opacity: 0.1
+            opacity: 0.5
         },
         highlight: {
             size: 0.4
@@ -55,6 +55,7 @@ function generateCube(size) {
         // Construct LED material
         var material = new THREE.MeshBasicMaterial({
             color: settings.cube.leds.defaultColor,
+            transparent: true,
             opacity: settings.cube.leds.opacity
         });
 
