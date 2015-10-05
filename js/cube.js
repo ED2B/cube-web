@@ -101,9 +101,7 @@ function generateHighlight() {
     return new THREE.Mesh(geometry, material);
 }
 
-function setLedOptions(e) {
-    e.preventDefault();
-
+function setLedOptions() {
     var x = $('#x').val();
     var y = $('#y').val();
     var z = $('#z').val();
@@ -138,7 +136,7 @@ function selectLed(x, y, z) {
 // Event listeners
 // ---
 
-$('#led-settings').submit(setLedOptions);
+$('#color').change(setLedOptions);
 $('#x, #y, #z').change(showLedOptions);
 $(document).on('mousedown', function(e) {
     var mouse = new THREE.Vector2(

@@ -5,14 +5,11 @@ body {
     text-align: center;
 }
 
-input, button {
+input {
     font-family: Arial;
     border: 0;
     outline: none;
     padding: 0.25rem;
-}
-
-form {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
