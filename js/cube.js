@@ -132,13 +132,7 @@ function selectLed(x, y, z) {
     $('#z').val(z);
 }
 
-// ---
-// Event listeners
-// ---
-
-$('#color').change(setLedOptions);
-$('#x, #y, #z').change(showLedOptions);
-$(document).on('mousedown', function(e) {
+function clickOnLed(e) {
     var mouse = new THREE.Vector2(
         ((e.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1,
         -((e.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1
@@ -159,7 +153,15 @@ $(document).on('mousedown', function(e) {
         selected.object.position.y,
         selected.object.position.z
     );
-});
+}
+
+// ---
+// Event listeners
+// ---
+
+$('#color').change(setLedOptions);
+$('#x, #y, #z').change(showLedOptions);
+$(document).click(clickOnLed);
 
 // ---
 // Main
