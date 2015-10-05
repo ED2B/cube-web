@@ -150,7 +150,7 @@ camera.position.copy(centerVector);
 camera.position.z *= 4;
 
 // Generate renderer and set canvas size
-var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(settings.canvas.width, settings.canvas.height);
 
 // Add canvas to DOM
