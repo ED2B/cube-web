@@ -2,7 +2,7 @@
   "name": "cube-web",
   "private": true,
   "dependencies": {
-    "bootstrap": "~4.0.0",
+    "jquery": "~2.1.4",
     "three.js": "threejs#*"
   }
 }

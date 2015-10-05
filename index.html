@@ -5,43 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>LED Cube</title>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <style>
-    canvas {
-        cursor: move;
-    }
-    </style>
+    <link rel="stylesheet" href="css/cube.css">
 </head>
 <body>
-    <div class="container text-center">
-        <div id="3d-cube"></div>
-        <hr>
-        <form class="form-inline">
-            <fieldset class="form-group">
-                <label for="x">X</label>
-                <input class="form-control" type="number" min="0" max="7" value="0" name="x" id="x">
-            </fieldset>
-            <fieldset class="form-group">
-                <label for="y">Y</label>
-                <input class="form-control" type="number" min="0" max="7" value="0" name="y" id="y">
-            </fieldset>
-            <fieldset class="form-group">
-                <label for="z">Z</label>
-                <input class="form-control" type="number" min="0" max="7" value="0" name="z" id="z">
-            </fieldset>
-        </form>
-        <hr>
-        <form id="led-settings">
-            <fieldset class="form-group">
-                <label for="color">Color</label>
-                <div class="input-group">
-                    <div class="input-group-addon">#</div>
-                    <input class="form-control" type="text" maxlength="6" name="color" id="color">
-                </div>
-            </fieldset>
-            <button class="btn btn-primary">Update</button>
-        </form>
-    </div>
+    <h1>LED Cube</h1>
+    <div id="3d-cube"></div>
+    <form>
+        <label for="x">X</label>
+        <input type="number" min="0" max="7" value="0" name="x" id="x">
+        <label for="y">Y</label>
+        <input type="number" min="0" max="7" value="0" name="y" id="y">
+        <label for="z">Z</label>
+        <input type="number" min="0" max="7" value="0" name="z" id="z">
+    </form>
+    <form id="led-settings">
+        <label for="color">Color</label>
+        <input type="text" maxlength="6" name="color" id="color">
+        <button>Update</button>
+    </form>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/three.js/build/three.min.js"></script>
     <script src="bower_components/three.js/examples/js/controls/OrbitControls.js"></script>
