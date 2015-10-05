@@ -134,8 +134,8 @@ $('#led-settings').submit(setLedOptions);
 $('#x, #y, #z').change(showLedOptions);
 $(document).on('mousedown', function(e) {
     var mouse = new THREE.Vector2(
-        (e.clientX / window.innerWidth) * 2 - 1,
-        -(e.clientY / window.innerHeight) * 2 + 1
+        ((e.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1,
+        -((e.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1
     );
 
     var raycaster = new THREE.Raycaster();
@@ -148,7 +148,7 @@ $(document).on('mousedown', function(e) {
         return;
     }
 
-    highlight.position.copy(selected.point);
+    highlight.position.copy(selected.object.position);
 });
 
 // ---
