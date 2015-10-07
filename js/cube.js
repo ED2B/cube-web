@@ -9,11 +9,11 @@ var settings = {
         size: 8,
         leds: {
             defaultColor: 0xffffff,
-            size: 0.2,
+            size: 0.3,
             opacity: 0.5
         },
         highlight: {
-            size: 0.4
+            size: 0.5
         }
     },
     canvas: {
