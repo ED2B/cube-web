@@ -49,25 +49,53 @@ Led.prototype.select = function() {
 // Functions
 // ---
 
+/**
+ * Turn a hex number into a string.
+ *
+ * @param  {number} hex
+ * @return {string}
+ */
 function hexToString(hex) {
     hex = hex.toString(16).toUpperCase();
     return "000000".substr(0, 6 - hex.length) + hex;
 }
 
+/**
+ * Turn a string into a hex number.
+ *
+ * @param  {string} string
+ * @return {number}
+ */
 function stringToHex(string) {
     return parseInt(string, 16);
 }
 
+/**
+ * Get an LED by position object.
+ *
+ * @param  {THREE.Vector3} position
+ * @return {Led}
+ */
 function getLed(position) {
     return leds[position.x][position.y][position.z];
 }
 
+/**
+ * Set the position input.
+ *
+ * @param {THREE.Vector3} position
+ */
 function setPositionInput(position) {
     $('#x').val(position.x);
     $('#y').val(position.y);
     $('#z').val(position.z);
 }
 
+/**
+ * Get the position input.
+ *
+ * @return {THREE.Vector3}
+ */
 function getPositionInput() {
     return new THREE.Vector3(
         $('#x').val(),
@@ -76,7 +104,15 @@ function getPositionInput() {
     );
 }
 
+/**
+ * Generate a cube of LEDs.
+ *
+ * @param  {number} size
+ * @return {Led[][][]}
+ */
 function generateCube(size) {
+    var leds = [];
+
     // Construct LED geometry
     var geometry = new THREE.BoxGeometry(
         settings.cube.leds.size,
@@ -116,8 +152,13 @@ function generateCube(size) {
         // Add LED to the scene
         scene.add(led);
     }
+
+    return leds;
 }
 
+/**
+ * Generate a highlighter object.
+ */
 function generateHighlight() {
     var geometry = new THREE.BoxGeometry(
         settings.cube.highlight.size,
@@ -131,9 +172,16 @@ function generateHighlight() {
         opacity: 0.5
     });
 
-    return new THREE.Mesh(geometry, material);
+    var highlight = new THREE.Mesh(geometry, material);
+
+    scene.add(highlight);
+
+    return highlight;
 }
 
+/**
+ * Save LED options from input.
+ */
 function saveLedOptions() {
     var position = getPositionInput();
 
@@ -142,6 +190,9 @@ function saveLedOptions() {
     getLed(position).setColor(color);
 }
 
+/**
+ * Display LED options when changing selected LED.
+ */
 function showLedOptions() {
     var position = getPositionInput();
 
@@ -150,7 +201,22 @@ function showLedOptions() {
     $('#color').val(hex);
 }
 
-function clickOnLed(e) {
+// ---
+// Event listeners
+// ---
+
+$('#color').change(saveLedOptions);
+
+$('#x, #y, #z').change(function() {
+    var position = getPositionInput();
+
+    getLed(position).select();
+
+    showLedOptions();
+});
+
+$(document).click(function(e) {
+    // Calculate the mouse vector in relation to the canvas
     var mouse = new THREE.Vector2(
         ((e.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1,
         -((e.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1
@@ -160,6 +226,7 @@ function clickOnLed(e) {
 
     raycaster.setFromCamera(mouse, camera);
 
+    // Find the first intersecting object
     var selected = raycaster.intersectObjects(scene.children)[0];
 
     if (!selected) {
@@ -167,21 +234,7 @@ function clickOnLed(e) {
     }
 
     getLed(selected.object.position).select();
-}
-
-// ---
-// Event listeners
-// ---
-
-$('#color').change(saveLedOptions);
-$('#x, #y, #z').change(function() {
-    var position = getPositionInput();
-
-    getLed(position).select();
-
-    showLedOptions();
 });
-$(document).click(clickOnLed);
 
 // ---
 // Main
@@ -214,12 +267,8 @@ controls.enableKeys = false;
 controls.target.copy(centerVector);
 controls.update();
 
-// 3D array to store LEDs in their [x][y][z] co-ordinates
-var leds = [];
-
-generateCube(settings.cube.size);
+var leds = generateCube(settings.cube.size);
 var highlight = generateHighlight();
-scene.add(highlight);
 showLedOptions();
 
 // ---
