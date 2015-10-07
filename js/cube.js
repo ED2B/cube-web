@@ -1,4 +1,3 @@
-// ---
 // LED Cube JS
 //
 // @author Nat Zimmermann <hi@natzim.xyz>
@@ -39,19 +38,52 @@ Led.prototype.setColor = function(hex) {
     this.object.material.color.setHex(hex);
 };
 
+Led.prototype.select = function() {
+    highlight.position.copy(this.object.position);
+    setPositionInput(this.object.position);
+    showLedOptions();
+};
+
 // ---
 // Functions
 // ---
 
-function generateCube(size) {
-    for (var i = 0; i < Math.pow(size, 3); i++) {
-        // Construct LED geometry
-        var geometry = new THREE.BoxGeometry(
-            settings.cube.leds.size,
-            settings.cube.leds.size,
-            settings.cube.leds.size
-        );
+function hexToString(hex) {
+    hex = hex.toString(16).toUpperCase();
+    return "000000".substr(0, 6 - hex.length) + hex;
+}
 
+function stringToHex(string) {
+    return parseInt(string, 16);
+}
+
+function getLed(position) {
+    return leds[position.x][position.y][position.z];
+}
+
+function setPositionInput(position) {
+    $('#x').val(position.x);
+    $('#y').val(position.y);
+    $('#z').val(position.z);
+}
+
+function getPositionInput() {
+    return new THREE.Vector3(
+        $('#x').val(),
+        $('#y').val(),
+        $('#z').val()
+    );
+}
+
+function generateCube(size) {
+    // Construct LED geometry
+    var geometry = new THREE.BoxGeometry(
+        settings.cube.leds.size,
+        settings.cube.leds.size,
+        settings.cube.leds.size
+    );
+
+    for (var i = 0; i < Math.pow(size, 3); i++) {
         // Construct LED material
         var material = new THREE.MeshBasicMaterial({
             color: settings.cube.leds.defaultColor,
@@ -101,35 +133,20 @@ function generateHighlight() {
     return new THREE.Mesh(geometry, material);
 }
 
-function setLedOptions() {
-    var x = $('#x').val();
-    var y = $('#y').val();
-    var z = $('#z').val();
+function saveLedOptions() {
+    var position = getPositionInput();
 
-    var color = parseInt($('#color').val(), 16);
+    var color = stringToHex($('#color').val());
 
-    leds[x][y][z].setColor(color);
+    getLed(position).setColor(color);
 }
 
 function showLedOptions() {
-    var x = $('#x').val();
-    var y = $('#y').val();
-    var z = $('#z').val();
+    var position = getPositionInput();
 
-    var hex = leds[x][y][z].getColor().toString(16).toUpperCase();
-    hex = "000000".substr(0, 6 - hex.length) + hex;
+    var hex = hexToString(getLed(position).getColor());
 
     $('#color').val(hex);
-
-    selectLed(x, y, z);
-}
-
-function selectLed(x, y, z) {
-    highlight.position.set(x, y, z);
-
-    $('#x').val(x);
-    $('#y').val(y);
-    $('#z').val(z);
 }
 
 function clickOnLed(e) {
@@ -148,19 +165,21 @@ function clickOnLed(e) {
         return;
     }
 
-    selectLed(
-        selected.object.position.x,
-        selected.object.position.y,
-        selected.object.position.z
-    );
+    getLed(selected.object.position).select();
 }
 
 // ---
 // Event listeners
 // ---
 
-$('#color').change(setLedOptions);
-$('#x, #y, #z').change(showLedOptions);
+$('#color').change(saveLedOptions);
+$('#x, #y, #z').change(function() {
+    var position = getPositionInput();
+
+    getLed(position).select();
+
+    showLedOptions();
+});
 $(document).click(clickOnLed);
 
 // ---
